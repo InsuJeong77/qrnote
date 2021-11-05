@@ -2,6 +2,8 @@ package hack.jbnu.qrnote.service;
 
 import hack.jbnu.qrnote.domain.Memo;
 import hack.jbnu.qrnote.domain.QRMemo;
+import hack.jbnu.qrnote.domain.User;
+import hack.jbnu.qrnote.dto.QRMemoVO;
 import hack.jbnu.qrnote.repository.MemoRepository;
 import hack.jbnu.qrnote.repository.QRMemoRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +15,8 @@ public class MemoService {
     private final MemoRepository memoRepository;
     private final QRMemoRepository qrMemoRepository;
 
-    public QRMemo create(Memo memo) {
-        QRMemo qrMemo = QRMemo.create(memo);
+    public QRMemo create(QRMemoVO qrMemoVO, String loginId) {
+        QRMemo qrMemo = QRMemo.create(qrMemoVO, loginId);
         qrMemoRepository.save(qrMemo);
         return qrMemo;
     }
@@ -27,4 +29,5 @@ public class MemoService {
         memo.setId(null);
         memoRepository.save(memo);
     }
+
 }
