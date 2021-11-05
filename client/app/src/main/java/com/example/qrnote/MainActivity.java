@@ -13,11 +13,20 @@ import android.view.ViewGroup;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.mikepenz.aboutlibraries.LibsBuilder;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import android.widget.ImageView;
+
+
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
                 }
             });
+
+
     //fragment 선언
     Fragment mainfragment;
     Fragment notefragment;
@@ -82,11 +93,41 @@ public class MainActivity extends AppCompatActivity {
 
     // click qr button event
     public void ClickQRScanButton(View v){
-        System.out.println("Start Test");
         scanBarcode(v);
     }
 
-    public void scanBarcode(View view) {
-        barcodeLauncher.launch(new ScanOptions());
+    public void ClickQRFindButton(View v){
+        System.out.println("asdfsdf");
+        generateQRCode("dddd");
     }
+
+    public void scanBarcode(View view) {
+        ScanOptions options = new ScanOptions();
+        options.setOrientationLocked(false);
+        options.setPrompt("QR코드를 스캔하세요");
+        barcodeLauncher.launch(options);
+    }
+
+    public void generateQRCode(String contents) {
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        try {
+            Bitmap bitmap = toBitmap(qrCodeWriter.encode(contents, BarcodeFormat.QR_CODE, 100, 100));
+            ((ImageView) findViewById(R.id.generated_qrcode)).setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Bitmap toBitmap(BitMatrix matrix) {
+        int height = matrix.getHeight();
+        int width = matrix.getWidth();
+        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                bmp.setPixel(x, y, matrix.get(x, y) ? Color.BLACK : Color.WHITE);
+            }
+        }
+        return bmp;
+    }
+
 }
