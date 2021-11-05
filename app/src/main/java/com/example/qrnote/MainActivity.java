@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //fragment 생성자 만들기
+        //fragment 생성자 만들기 정인수 바보
         mainfragment = new MainFragment();
         notefragment = new NoteFragment();
 
