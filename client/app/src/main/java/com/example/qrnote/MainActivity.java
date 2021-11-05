@@ -3,16 +3,46 @@ package com.example.qrnote;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.view.View;
-import android.widget.Button;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
+import android.hardware.Camera;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.zxing.client.android.Intents;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
+import com.mikepenz.aboutlibraries.LibsBuilder;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
+    //barcodeLauncher
+    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
+            result -> {
+                if(result.getContents() == null) {
+                    Intent originalIntent = result.getOriginalIntent();
+                    if (originalIntent == null) {
+                        Log.d("MainActivity", "Cancelled scan");
+                        Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
+                    } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
+                        Log.d("MainActivity", "Cancelled scan due to missing camera permission");
+                        Toast.makeText(MainActivity.this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Log.d("MainActivity", "Scanned");
+                    Toast.makeText(MainActivity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                }
+            });
     //fragment 선언
     Fragment mainfragment;
     Fragment notefragment;
@@ -48,13 +78,15 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-        Button button = (Button)findViewById(R.id.qr_scan_button);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
+    }
 
+    // click qr button event
+    public void ClickQRScanButton(View v){
+        System.out.println("Start Test");
+        scanBarcode(v);
+    }
+
+    public void scanBarcode(View view) {
+        barcodeLauncher.launch(new ScanOptions());
     }
 }

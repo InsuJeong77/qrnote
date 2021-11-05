@@ -10,7 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:text="@string/button_string_qr_scan" />
+        android:text="@string/button_string_qr_scan"
+        android:onClick="ClickQRScanButton"/>
 
     <Button
         android:id="@+id/qr_find_button"
