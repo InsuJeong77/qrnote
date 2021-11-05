@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <div th:replace="/fragments/header.html :: header"></div>
+    <style>
+        li.selected {
+            color: green;
+        }
+    </style>
+    <title>MemoList</title>
+</head>
+<body>
+<!--사이드바-->
+<div class="side-bar">
+    <ul class="team-list">
+        <li th:id="${i.id}" th:each="i : ${teams}">
+            <span th:text="${i.name}"></span>
+        </li>
+    </ul>
+</div>
+<!--메시지 리스트-->
+<th:block th:each="m : ${teamMemo}">
+    <div class="container" th:id="|memo-${m.key}|">
+        <ul>
+            <li th:each="v : ${m.value}">
+                <span th:text="${v.currMemo.title}"></span>
+            </li>
+        </ul>
+        <a th:href="|@{/memo/create}?teamId=${m.key}&loginId=${loginId}|" th:text="생성"></a>
+    </div>
+</th:block>
+</body>
+
+<script th:inline="javascript">
+    $(document).ready(function(){
+        var $li = $('.side-bar li').click(function() {
+            $li.removeClass('selected');
+            $(this).addClass('selected');
+
+            var id = "memo-" + $(this).attr('id');
+            $('.container').addClass('d-none');
+            $('#' + id).removeClass('d-none');
+        });
+        $('.side-bar li:first').trigger('click');
+    });
+</script>
+</html>
