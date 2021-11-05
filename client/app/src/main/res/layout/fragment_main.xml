@@ -6,17 +6,17 @@
     tools:context=".MainFragment">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/qr_scan_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:text="@string/qr_scan" />
+        android:text="@string/button_string_qr_scan" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/qr_find_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:text="@string/qr_find" />
+        android:text="@string/button_string_qr_find" />
 
 </FrameLayout>

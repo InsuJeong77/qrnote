@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">qrnote</string>
-    <string name="qr_scan">QR 코드 스캔</string>
-    <string name="qr_find">주변 QR노트 찾기</string>
-    <string name="note_create">노트 생성</string>
-    <string name="note_list">노트 목록</string>
+    <string name="button_string_qr_scan">QR 코드 스캔</string>
+    <string name="button_string_qr_find">주변 QR노트 찾기</string>
+    <string name="button_string_note_create">노트 생성</string>
+    <string name="button_string_note_list">노트 목록</string>
 </resources>
