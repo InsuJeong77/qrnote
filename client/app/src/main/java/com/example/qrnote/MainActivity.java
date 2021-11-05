@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         scanBarcode(v);
     }
 
-    public void ClickQRFindButton(View v){
+    public void ClickQRGenerateButton(View v){
         System.out.println("asdfsdf");
         generateQRCode("dddd");
     }

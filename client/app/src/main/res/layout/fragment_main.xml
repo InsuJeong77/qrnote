@@ -11,21 +11,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:text="@string/button_string_qr_scan"
-        android:onClick="ClickQRScanButton"/>
+        android:onClick="ClickQRScanButton"
+        android:text="@string/button_string_qr_scan" />
 
     <Button
         android:id="@+id/qr_find_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:text="@string/button_string_qr_find"
-        android:onClick="ClickQRFindButton"/>
+        android:text="@string/button_string_qr_find" />
+
+    <Button
+        android:id="@+id/qr_generate_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="ClickQRGenerateButton"
+        android:text="@string/button_string_qr_generate" />
 
     <ImageView
         android:id="@+id/generated_qrcode"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:scaleType="center"
         android:src="@drawable/button_rect_normal" />
 
