@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="60dp"
     tools:context=".MainFragment">
 
     <Button
         android:id="@+id/qr_scan_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
+        android:layout_gravity="left|center"
         android:onClick="ClickQRScanButton"
         android:text="@string/button_string_qr_scan" />
 
@@ -25,7 +27,7 @@
         android:id="@+id/qr_generate_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="right|center"
         android:onClick="ClickQRGenerateButton"
         android:text="@string/button_string_qr_generate" />
 
@@ -35,5 +37,12 @@
         android:layout_height="wrap_content"
         android:scaleType="center"
         android:src="@drawable/button_rect_normal" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="TextView" />
 
 </FrameLayout>

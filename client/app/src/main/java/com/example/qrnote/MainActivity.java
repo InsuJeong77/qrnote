@@ -29,6 +29,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
+    public String qr_read_data;
+
     //barcodeLauncher
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
             result -> {
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Log.d("MainActivity", "Scanned");
                     Toast.makeText(MainActivity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                    qr_read_data = result.getContents();
                 }
             });
 
