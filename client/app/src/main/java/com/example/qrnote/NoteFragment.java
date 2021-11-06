@@ -1,5 +1,6 @@
 package com.example.qrnote;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -40,6 +42,7 @@ public class NoteFragment extends Fragment {
     private ListView    memoListView;
     private CustomTeamAdapter teamAdapter;
     private CustomMemoAdapter memoAdapter;
+    private Long teamId = 0L;
 
     public NoteFragment() {
         // Required empty public constructor
@@ -54,6 +57,16 @@ public class NoteFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        dataRefresh();
+    }
+
+    private void dataRefresh() {
+        getMemos(token, teamId);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -62,9 +75,20 @@ public class NoteFragment extends Fragment {
         teams = new ArrayList<Team>();
         memos = new ArrayList<Memo>();
         getTeams(token);
+        dataRefresh();
 
         teamListView= (ListView) view.findViewById(R.id.list_view);
         memoListView= (ListView) view.findViewById(R.id.memo_view);
+
+        Button createBtn = view.findViewById(R.id.note_create_button);
+        createBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), MakeNote.class);
+                intent.putExtra("teamId", teamId);
+                startActivity(intent);
+            }
+        });
 
         teamAdapter = new CustomTeamAdapter(getActivity(), teams);
         memoAdapter = new CustomMemoAdapter(getActivity(), memos);
@@ -74,6 +98,7 @@ public class NoteFragment extends Fragment {
         teamListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                teamId = teams.get(i).getId();
                 getMemos(token, teams.get(i).getId());
             }
         });

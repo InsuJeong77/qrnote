@@ -97,9 +97,6 @@ public class MainActivity extends AppCompatActivity {
 //        }
     }
 
-    public void ClickMakeNoteButton(View v) {
-        setContentView(R.layout.fragment_makenote);
-    }
     // click qr button event
     public void ClickQRScanButton(View v){
         scanBarcode(v);
