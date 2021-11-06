@@ -3,50 +3,36 @@ package com.example.qrnote;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 
 import com.example.qrnote.Note.NoteFragment;
-import com.google.zxing.client.android.Intents;
-import com.journeyapps.barcodescanner.ScanContract;
-import com.journeyapps.barcodescanner.ScanOptions;
-import com.google.zxing.qrcode.QRCodeWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-import android.widget.ImageView;
 
 
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
-    public String qr_read_data;
+
+    // FrameLayout에 각 메뉴의 Fragment를 바꿔 줌
+    private FragmentManager fragmentManager = getSupportFragmentManager();
+    private FragmentTransaction transaction;
+    // 4개의 메뉴에 들어갈 Fragment들
+    private MainFragment mainfragment = new MainFragment();
+    private NoteFragment notefragment = new NoteFragment();
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //fragment 생성자 만들기
-        mainfragment = new MainFragment();
-        notefragment = new NoteFragment();
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, mainfragment).commit();
-        //초기 화면 설정
-
-        //bottomNavigator
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_menu);
+        bottomNavigationView = findViewById(R.id.bottom_menu);
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -64,12 +50,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+        fragmentManager.beginTransaction().replace(R.id.container, mainfragment).commitAllowingStateLoss();
+        //초기 화면 설정
+
     }
 
-
-    //fragment 선언
-    Fragment mainfragment;
-    Fragment notefragment;
 
 //    public void generateQRCode(String contents) {
 //        QRCodeWriter qrCodeWriter = new QRCodeWriter();
