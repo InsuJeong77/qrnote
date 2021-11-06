@@ -4,14 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
-import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -19,7 +15,6 @@ import android.graphics.Color;
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
-import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.BarcodeFormat;
@@ -30,7 +25,6 @@ import android.widget.ImageView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -83,14 +77,29 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.note_tab:
                                 getSupportFragmentManager().beginTransaction().replace(R.id.container, notefragment).commit();
                                 return true;
+
                         }
                         return false;
                     }
                 }
         );
-
+//
+//        try {
+//            Button b = findViewById(R.id.note_create_button);
+//            b.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                }
+//            });
+//        } catch (NullPointerException e) {
+//            System.out.println("noting input");
+//        }
     }
 
+    public void ClickMakeNoteButton(View v) {
+        setContentView(R.layout.fragment_makenote);
+    }
     // click qr button event
     public void ClickQRScanButton(View v){
         scanBarcode(v);

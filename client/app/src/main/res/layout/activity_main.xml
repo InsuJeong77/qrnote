@@ -20,6 +20,6 @@
         app:itemIconTint="#FFFFFF"
         app:itemTextColor="#f6d170"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_menu"/>
+        app:menu="@menu/bottom_menu" />
 
 </RelativeLayout>

@@ -5,4 +5,6 @@
     <string name="button_string_qr_generate">QR Generate</string>
     <string name="button_string_note_create">노트 생성</string>
     <string name="button_string_note_list">노트 목록</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
