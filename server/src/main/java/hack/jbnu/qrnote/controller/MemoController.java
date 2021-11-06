@@ -52,11 +52,11 @@ public class MemoController {
 //        return "memo/list";
 //    }
 
-    @GetMapping("/sidebar")
+    @GetMapping("/teams")
     public ResponseEntity getTeamList(@RequestHeader("token") String token) {
         String loginId = (String) JwtToken.parseJwtToken(token).get("loginId");
         User user = userService.findByLoginId(loginId);
-        List<Long> teamIds = user.getUserTeamList().stream().map(t -> t.getId()).collect(Collectors.toList());
+        List<Long> teamIds = user.getUserTeamList().stream().map(t -> t.getTeam().getId()).collect(Collectors.toList());
         List<Team> teams = teamRepository.findByTeamIds(teamIds);
         return ResponseEntity.ok(ApiMessage.builder().data(teams).message("디렉토리 목록을 가져왔습니다.").build());
     }
