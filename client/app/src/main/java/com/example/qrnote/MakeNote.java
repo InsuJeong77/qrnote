@@ -54,7 +54,7 @@ public class MakeNote extends Fragment {
         }
         finally {
             try {
-                if (inputStream != null) inputStrea.close();
+                if (inputStream != null) inputStream.close();
             }
             catch (Exception e) {
                 e.printStackTrace();
