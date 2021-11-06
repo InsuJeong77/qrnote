@@ -187,7 +187,7 @@ public class NoteFragment extends Fragment {
                             for (int i = 0; i < data.length(); i++) {
                                 JSONObject o = (JSONObject) data.get(i);
                                 memos.add(new Memo(o.getLong("id"), o.getJSONObject("currMemo").getString("title"),
-                                        o.getJSONObject("currMemo").toString()));
+                                        o.getJSONObject("currMemo").toString(), o.getString("qrcode")));
                             }
                             memoAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {

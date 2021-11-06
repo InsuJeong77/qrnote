@@ -59,6 +59,7 @@ public class ReadNoteActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Memo qrMemo = (Memo) intent.getSerializableExtra("qrMemo");
+        String qrcode = qrMemo.getQRcode();
         try {
             currMemo = new JSONObject(qrMemo.getCurrMemo());
         } catch (JSONException e) {

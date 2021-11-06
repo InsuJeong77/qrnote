@@ -8,11 +8,13 @@ public class Memo implements Serializable {
     private Long id;
     private String title;
     private String currMemo;
+    private String qrcode;
 
-    public Memo(Long id, String title, String currMemo) {
+    public Memo(Long id, String title, String currMemo, String qrcode) {
         this.id = id;
         this.title = title;
         this.currMemo = currMemo;
+        this.qrcode = qrcode;
     }
     public String getTitle() {
         return title;
@@ -21,5 +23,8 @@ public class Memo implements Serializable {
         return id;
     }
     public String getCurrMemo() { return currMemo; }
+    public String getQRcode() {
+        return qrcode;
+    }
 }
 
