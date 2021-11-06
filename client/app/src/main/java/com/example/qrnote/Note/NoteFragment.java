@@ -104,11 +104,11 @@ public class NoteFragment extends Fragment {
         teamListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                view.setSelected(true);
                 teamId = teams.get(i).getId();
                 getMemos(token, teamId);
             }
         });
-
         memoListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

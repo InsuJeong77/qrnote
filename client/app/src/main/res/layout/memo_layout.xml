@@ -4,6 +4,11 @@
     android:layout_height="match_parent" >
     <TextView
         android:id="@+id/memo_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:height="160px"
+        android:textSize="20dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"/>
 </LinearLayout>

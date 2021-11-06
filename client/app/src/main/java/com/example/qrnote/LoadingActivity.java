@@ -50,7 +50,7 @@ public class LoadingActivity extends AppCompatActivity {
             {
                 permissionCheck();
             }
-        }, 1000);
+        }, 2000);
     }
     private void loginCheck() {
         String token = tokenStore.getString("token", null);

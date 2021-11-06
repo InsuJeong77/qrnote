@@ -98,6 +98,9 @@ public class MainFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONObject data = response.getJSONObject("data");
+                            if (data == null) {
+                                Toast.makeText(getContext().getApplicationContext(), response.getString("message"), Toast.LENGTH_LONG).show();
+                            }
                             Memo memo = new Memo(data.toString(), qrcode);
                             readMemo(memo);
                         } catch (JSONException e) {
