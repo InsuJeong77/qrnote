@@ -16,6 +16,11 @@ public class Memo implements Serializable {
         this.currMemo = currMemo;
         this.qrcode = qrcode;
     }
+
+    public Memo(String currMemo, String qrcode) {
+        this.currMemo = currMemo;
+        this.qrcode = qrcode;
+    }
     public String getTitle() {
         return title;
     }

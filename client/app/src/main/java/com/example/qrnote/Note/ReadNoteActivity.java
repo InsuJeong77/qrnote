@@ -81,8 +81,8 @@ public class ReadNoteActivity extends AppCompatActivity {
         editNote_HeadArea = findViewById(R.id.editNote_Head);
         imageView_QrImage = findViewById(R.id.qr_imageView);
 
-        editNote_HeadArea.setText(qrMemo.getTitle());
         try {
+            editNote_HeadArea.setText(currMemo.getString("title"));
             editNote_TextArea.setText(currMemo.getString("contents"));
         } catch (JSONException e) {
             e.printStackTrace();

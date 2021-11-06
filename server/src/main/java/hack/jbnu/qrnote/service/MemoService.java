@@ -51,7 +51,8 @@ public class MemoService {
         QRMemo byQrcode = qrMemoRepository.findByQrcode(qrcode);
         if (byQrcode == null) {
             return ResponseEntity.ok(ApiMessage.builder().data(null).message("잘못 된 qr코드 입니다.").build());
-        } else if (!userService.findByLoginId(loginId).getUserTeamList().contains(byQrcode)) {
+        } else if (!userService.findByLoginId(loginId).getUserTeamList().stream().map(ut ->
+                ut.getTeam().getId()).collect(Collectors.toList()).contains(byQrcode.getAuthTeamId())) {
             return ResponseEntity.ok(ApiMessage.builder().data(null).message("접근 권한이 없습니다.").build());
         }
         //메모만 가져옴, 버전관리를 위한 메모장 리스트는 나중에 다시 구현

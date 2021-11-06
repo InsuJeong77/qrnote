@@ -67,68 +67,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //barcodeLauncher
-    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
-            result -> {
-                if(result.getContents() == null) {
-                    Intent originalIntent = result.getOriginalIntent();
-                    if (originalIntent == null) {
-                        Log.d("MainActivity", "Cancelled scan");
-                        Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
-                    } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
-                        Log.d("MainActivity", "Cancelled scan due to missing camera permission");
-                        Toast.makeText(MainActivity.this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    Log.d("MainActivity", "Scanned");
-                    Toast.makeText(MainActivity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                    qr_read_data = result.getContents();
-                    TextView qr_textview = (TextView) findViewById(R.id.qr_textView);
-                    qr_textview.setText(qr_read_data);
-                }
-            });
-
-
     //fragment 선언
     Fragment mainfragment;
     Fragment notefragment;
 
-    // click qr button event
-    public void ClickQRScanButton(View v){
-        scanBarcode(v);
-    }
-
-    public void ClickQRGenerateButton(View v){
-        generateQRCode("dddd");
-    }
-
-    public void scanBarcode(View view) {
-        ScanOptions options = new ScanOptions();
-        options.setOrientationLocked(false);
-        options.setPrompt("QR 코드를 스캔하세요");
-        barcodeLauncher.launch(options);
-    }
-
-    public void generateQRCode(String contents) {
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        try {
-            Bitmap bitmap = toBitmap(qrCodeWriter.encode(contents, BarcodeFormat.QR_CODE, 100, 100));
-            ((ImageView) findViewById(R.id.generated_qrcode)).setImageBitmap(bitmap);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static Bitmap toBitmap(BitMatrix matrix) {
-        int height = matrix.getHeight();
-        int width = matrix.getWidth();
-        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                bmp.setPixel(x, y, matrix.get(x, y) ? Color.BLACK : Color.WHITE);
-            }
-        }
-        return bmp;
-    }
+//    public void generateQRCode(String contents) {
+//        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+//        try {
+//            Bitmap bitmap = toBitmap(qrCodeWriter.encode(contents, BarcodeFormat.QR_CODE, 100, 100));
+//            ((ImageView) findViewById(R.id.generated_qrcode)).setImageBitmap(bitmap);
+//        } catch (WriterException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public static Bitmap toBitmap(BitMatrix matrix) {
+//        int height = matrix.getHeight();
+//        int width = matrix.getWidth();
+//        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+//        for (int x = 0; x < width; x++) {
+//            for (int y = 0; y < height; y++) {
+//                bmp.setPixel(x, y, matrix.get(x, y) ? Color.BLACK : Color.WHITE);
+//            }
+//        }
+//        return bmp;
+//    }
 
 }

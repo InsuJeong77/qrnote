@@ -112,14 +112,14 @@ public class NoteFragment extends Fragment {
         memoListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                readMemo(token, memos.get(i));
+                readMemo(memos.get(i));
             }
         });
 
         return view;
     }
 
-    private void readMemo(String token, Memo qrMemo) {
+    private void readMemo(Memo qrMemo) {
         Intent intent = new Intent(getActivity(), ReadNoteActivity.class);
         intent.putExtra("qrMemo", qrMemo);
         startActivity(intent);
