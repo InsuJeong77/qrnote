@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -48,9 +49,12 @@ public class NoteFragment extends Fragment {
     SharedPreferences tokenStore;
     String token;
 
-    private ArrayList<String>    list;
-    private ListView             listview;
-    private ArrayAdapter<String> adapter;
+    private ArrayList<Team>    teams;
+    private ArrayList<Memo>    memos;
+    private ListView    teamListView;
+    private ListView    memoListView;
+    private CustomTeamAdapter teamAdapter;
+    private CustomMemoAdapter memoAdapter;
 
     /**
      * Use this factory method to create a new instance of
@@ -93,12 +97,25 @@ public class NoteFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_note, container, false);
 
-        list = new ArrayList<String>();
-        listview= (ListView) view.findViewById(R.id.list_view);
-        adapter =  new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list);
-        listview.setAdapter(adapter);
-
+        teams = new ArrayList<Team>();
+        memos = new ArrayList<Memo>();
         getTeams(token);
+
+        teamListView= (ListView) view.findViewById(R.id.list_view);
+        memoListView= (ListView) view.findViewById(R.id.memo_view);
+
+        teamAdapter = new CustomTeamAdapter(getActivity(), teams);
+        memoAdapter = new CustomMemoAdapter(getActivity(), memos);
+//        adapter =  new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list);
+        teamListView.setAdapter(teamAdapter);
+        memoListView.setAdapter(memoAdapter);
+        teamListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                getMemos(token, teams.get(i).getId());
+            }
+        });
+
         return view;
     }
 
@@ -118,9 +135,54 @@ public class NoteFragment extends Fragment {
                             JSONArray data = response.getJSONArray("data");
                             for (int i = 0; i < data.length(); i++) {
                                 JSONObject o = (JSONObject) data.get(i);
-                                list.add(o.getString("name"));
+                                teams.add(new Team(o.getLong("id"), o.getString("name")));
                             }
-                            adapter.notifyDataSetChanged();
+                            teamAdapter.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+//                            문제발생 종료
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> header = new HashMap<>();
+                header.put("token", token);
+                return header;
+            }
+        };
+        request.setShouldCache(false);
+        AppHelper.requestQueue.add(request);
+    }
+
+    private void getMemos(String token, Long teamId) {
+        if(AppHelper.requestQueue == null){
+            AppHelper.requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        }
+        String url = "http://" + AppHelper.hostUrl + "/memo/list/" + teamId;
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                new JSONObject(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray data = response.getJSONArray("data");
+                            memos.clear();
+                            for (int i = 0; i < data.length(); i++) {
+                                JSONObject o = (JSONObject) data.get(i);
+                                memos.add(new Memo(o.getLong("id"), o.getJSONObject("currMemo").getString("title")));
+                            }
+                            memoAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

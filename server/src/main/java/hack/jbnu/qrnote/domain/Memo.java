@@ -1,5 +1,6 @@
 package hack.jbnu.qrnote.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +24,7 @@ public class Memo {
     private String contents;
     private LocalDateTime gTime = LocalDateTime.now();
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "qrmemo_id")
     private QRMemo qrMemo;

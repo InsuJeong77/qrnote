@@ -71,7 +71,7 @@ public class MemoController {
         } else {
             memos = memoService.findByTeamId(teamId);
         }
-        return ResponseEntity.ok(ApiMessage.builder().data(memos).message("메모들을 가져왔습니다."));
+        return ResponseEntity.ok(ApiMessage.builder().data(memos).message("메모들을 가져왔습니다.").build());
     }
 
 //    @PostMapping("/create")
