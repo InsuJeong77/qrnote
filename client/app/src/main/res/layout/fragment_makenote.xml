@@ -45,6 +45,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/button_load"
                 tools:ignore="SpeakableTextPresentCheck" />
+            <ImageView
+                android:id="@+id/qr_imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="13"
+                android:src="@drawable/button_rect_normal"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -67,7 +73,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_load" />
+
     </LinearLayout>
+
+
 
 </LinearLayout>
 

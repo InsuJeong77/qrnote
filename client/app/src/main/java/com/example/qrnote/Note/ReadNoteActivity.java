@@ -4,6 +4,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.view.ViewGroup;
 
@@ -27,6 +30,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.qrnote.AppHelper;
 import com.example.qrnote.R;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +49,7 @@ public class ReadNoteActivity extends AppCompatActivity {
     SharedPreferences tokenStore;
 
     private Button btn_Save;
+    private ImageView imageView_QrImage;
 
     private EditText editNote_TextArea;
     private EditText editNote_HeadArea;
@@ -71,6 +79,7 @@ public class ReadNoteActivity extends AppCompatActivity {
         btn_Save = findViewById(R.id.button_save);
         editNote_TextArea = findViewById(R.id.editNote);
         editNote_HeadArea = findViewById(R.id.editNote_Head);
+        imageView_QrImage = findViewById(R.id.qr_imageView);
 
         editNote_HeadArea.setText(qrMemo.getTitle());
         try {
@@ -78,6 +87,9 @@ public class ReadNoteActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        //imageView_QrImage.setImageBitmap(generateQRCode(qrcode));
+        generateQRCode(qrcode);
 
         btn_Save.setOnClickListener(btnSaveListener);
     }
@@ -159,4 +171,25 @@ public class ReadNoteActivity extends AppCompatActivity {
             finish();
     }
 
+    public void generateQRCode(String contents) {
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        try {
+            Bitmap bitmap = toBitmap(qrCodeWriter.encode(contents, BarcodeFormat.QR_CODE, 100, 100));
+            ((ImageView) findViewById(R.id.qr_imageView)).setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Bitmap toBitmap(BitMatrix matrix) {
+        int height = matrix.getHeight();
+        int width = matrix.getWidth();
+        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                bmp.setPixel(x, y, matrix.get(x, y) ? Color.BLACK : Color.WHITE);
+            }
+        }
+        return bmp;
+    }
 }
