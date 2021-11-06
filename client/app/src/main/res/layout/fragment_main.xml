@@ -12,8 +12,7 @@
         android:id="@+id/qr_scan_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:layout_gravity="center"
+        android:layout_gravity="left|center"
         android:onClick="ClickQRScanButton"
         android:text="@string/button_string_qr_scan" />
 
@@ -28,8 +27,7 @@
         android:id="@+id/qr_generate_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_gravity="right"
+        android:layout_gravity="right|center"
         android:onClick="ClickQRGenerateButton"
         android:text="@string/button_string_qr_generate" />
 

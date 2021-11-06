@@ -37,4 +37,5 @@
                 android:layout_height="match_parent"/>
 
         </LinearLayout>
+    </LinearLayout>
 </FrameLayout>
