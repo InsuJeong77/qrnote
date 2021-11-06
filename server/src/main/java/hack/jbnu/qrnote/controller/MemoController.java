@@ -74,20 +74,20 @@ public class MemoController {
         return ResponseEntity.ok(ApiMessage.builder().data(memos).message("메모들을 가져왔습니다.").build());
     }
 
-//    @PostMapping("/create")
-//    public ResponseEntity create(@RequestBody QRMemoVO qrMemoVO,
-//                                 @RequestHeader("token") String token, BindingResult result) {
-//        smartValidator.validate(qrMemoVO.getMemo(), result);
-//        smartValidator.validate(qrMemoVO, result);
-//        if (result.hasErrors()) {
-//            //에러메시지
-//            return ResponseEntity.ok(ApiMessage.builder().data(new QRMemoDTO(false, null)).message("에러 메시지").build());
-//        }
-//        String loginId = (String) JwtToken.parseJwtToken(token).get("loginId");
-//        QRMemo qrMemo = memoService.create(qrMemoVO, loginId);
-//        //성공메세지
-//        return ResponseEntity.ok(ApiMessage.builder().data(new QRMemoDTO(true, qrMemo.getQrcode())).message("성공 메시지").build());
-//    }
+    @PostMapping("/create")
+    public ResponseEntity create(@RequestBody QRMemoVO qrMemoVO,
+                                 @RequestHeader("token") String token, BindingResult result) {
+        smartValidator.validate(qrMemoVO.getMemo(), result);
+        smartValidator.validate(qrMemoVO, result);
+        if (result.hasErrors()) {
+            //에러메시지
+            return ResponseEntity.ok(ApiMessage.builder().data(new QRMemoDTO(false, null)).message("에러 메시지").build());
+        }
+        String loginId = (String) JwtToken.parseJwtToken(token).get("loginId");
+        QRMemo qrMemo = memoService.create(qrMemoVO, loginId);
+        //성공메세지
+        return ResponseEntity.ok(ApiMessage.builder().data(new QRMemoDTO(true, qrMemo.getQrcode())).message("성공 메시지").build());
+    }
 
     //memo객체에 QRMemo가 필수로 있어야함
     @PostMapping("/modify")

@@ -16,8 +16,6 @@ public class QRMemoVO {
     Memo memo;
     @NotNull
     Long teamId;
-    @NotNull
-    Double lat;
-    @NotNull
-    Double lng;
+    Double lat = 0.0;
+    Double lng = 0.0;
 }

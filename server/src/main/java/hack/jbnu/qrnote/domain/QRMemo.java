@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +35,7 @@ public class QRMemo {
 
     public QRMemo() {
     }
-    public QRMemo(Long teamId, double lat, double lng, String writer) {
+    public QRMemo(Long teamId, Double lat, Double lng, String writer) {
         this.authTeamId = teamId;
         this.lat = lat;
         this.lng = lng;
