@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-<<<<<<< HEAD
+
         android:orientation="vertical">
         <Button
             android:id="@+id/note_create_button"
@@ -40,8 +40,7 @@
                 android:layout_height="match_parent"/>
 
         </LinearLayout>
-=======
-        android:orientation="horizontal">
+
         <ListView
             android:id="@+id/list_view"
             android:layout_width="0dp"
@@ -52,7 +51,6 @@
             android:layout_width="0dp"
             android:layout_weight="8"
             android:layout_height="match_parent"/>
->>>>>>> 05837995c4abcc6246d01cf11fba09b1c6fe98d2
     </LinearLayout>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/note_create_button"
