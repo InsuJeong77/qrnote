@@ -1,0 +1,451 @@
+Index: app/src/main/java/com/example/qrnote/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.qrnote;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.fragment.app.Fragment;\r\n\r\nimport android.content.Intent;\r\nimport android.hardware.Camera;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.view.MenuItem;\r\nimport android.widget.Button;\r\nimport android.widget.Toast;\r\nimport android.graphics.Bitmap;\r\nimport android.graphics.Color;\r\n\r\nimport com.google.zxing.client.android.Intents;\r\nimport com.journeyapps.barcodescanner.ScanContract;\r\nimport com.journeyapps.barcodescanner.ScanOptions;\r\nimport com.mikepenz.aboutlibraries.LibsBuilder;\r\nimport com.google.zxing.qrcode.QRCodeWriter;\r\nimport com.google.zxing.common.BitMatrix;\r\nimport com.google.zxing.BarcodeFormat;\r\nimport com.google.zxing.WriterException;\r\nimport android.widget.ImageView;\r\n\r\n\r\n\r\nimport androidx.activity.result.ActivityResultLauncher;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.fragment.app.Fragment;\r\n\r\nimport com.google.android.material.bottomnavigation.BottomNavigationView;\r\n\r\npublic class MainActivity extends AppCompatActivity {\r\n    //barcodeLauncher\r\n    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),\r\n            result -> {\r\n                if(result.getContents() == null) {\r\n                    Intent originalIntent = result.getOriginalIntent();\r\n                    if (originalIntent == null) {\r\n                        Log.d(\"MainActivity\", \"Cancelled scan\");\r\n                        Toast.makeText(MainActivity.this, \"Cancelled\", Toast.LENGTH_LONG).show();\r\n                    } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {\r\n                        Log.d(\"MainActivity\", \"Cancelled scan due to missing camera permission\");\r\n                        Toast.makeText(MainActivity.this, \"Cancelled due to missing camera permission\", Toast.LENGTH_LONG).show();\r\n                    }\r\n                } else {\r\n                    Log.d(\"MainActivity\", \"Scanned\");\r\n                    Toast.makeText(MainActivity.this, \"Scanned: \" + result.getContents(), Toast.LENGTH_LONG).show();\r\n                }\r\n            });\r\n\r\n\r\n    //fragment 선언\r\n    Fragment mainfragment;\r\n    Fragment notefragment;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_main);\r\n\r\n        //fragment 생성자 만들기\r\n        mainfragment = new MainFragment();\r\n        notefragment = new NoteFragment();\r\n\r\n        getSupportFragmentManager().beginTransaction().replace(R.id.container, mainfragment).commit();\r\n        //초기 화면 설정\r\n\r\n        //bottomNavigator\r\n        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_menu);\r\n        bottomNavigationView.setOnNavigationItemSelectedListener(\r\n                new BottomNavigationView.OnNavigationItemSelectedListener() {\r\n                    @Override\r\n                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {\r\n                        switch(menuItem.getItemId()) {\r\n                            case R.id.main_tab:\r\n                                getSupportFragmentManager().beginTransaction().replace(R.id.container, mainfragment).commit();\r\n                                return true;\r\n                            case R.id.note_tab:\r\n                                getSupportFragmentManager().beginTransaction().replace(R.id.container, notefragment).commit();\r\n                                return true;\r\n                        }\r\n                        return false;\r\n                    }\r\n                }\r\n        );\r\n\r\n    }\r\n\r\n    // click qr button event\r\n    public void ClickQRScanButton(View v){\r\n        scanBarcode(v);\r\n    }\r\n\r\n    public void ClickQRGenerateButton(View v){\r\n        System.out.println(\"asdfsdf\");\r\n        generateQRCode(\"dddd\");\r\n    }\r\n\r\n    public void scanBarcode(View view) {\r\n        ScanOptions options = new ScanOptions();\r\n        options.setOrientationLocked(false);\r\n        options.setPrompt(\"QR코드를 스캔하세요\");\r\n        barcodeLauncher.launch(options);\r\n    }\r\n\r\n    public void generateQRCode(String contents) {\r\n        QRCodeWriter qrCodeWriter = new QRCodeWriter();\r\n        try {\r\n            Bitmap bitmap = toBitmap(qrCodeWriter.encode(contents, BarcodeFormat.QR_CODE, 100, 100));\r\n            ((ImageView) findViewById(R.id.generated_qrcode)).setImageBitmap(bitmap);\r\n        } catch (WriterException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    public static Bitmap toBitmap(BitMatrix matrix) {\r\n        int height = matrix.getHeight();\r\n        int width = matrix.getWidth();\r\n        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);\r\n        for (int x = 0; x < width; x++) {\r\n            for (int y = 0; y < height; y++) {\r\n                bmp.setPixel(x, y, matrix.get(x, y) ? Color.BLACK : Color.WHITE);\r\n            }\r\n        }\r\n        return bmp;\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/qrnote/MainActivity.java b/app/src/main/java/com/example/qrnote/MainActivity.java
+--- a/app/src/main/java/com/example/qrnote/MainActivity.java	(revision b191ebfc10af8669cd8fce54298f513f39a77005)
++++ b/app/src/main/java/com/example/qrnote/MainActivity.java	(date 1636160692617)
+@@ -83,12 +83,23 @@
+                             case R.id.note_tab:
+                                 getSupportFragmentManager().beginTransaction().replace(R.id.container, notefragment).commit();
+                                 return true;
++
+                         }
+                         return false;
+                     }
+                 }
+         );
+ 
++        try {
++            Button b = findViewById(R.id.note_create_button);
++            b.setOnClickListener(new View.OnClickListener() {
++                public void onClick(View v) {
++                    setContentView(R.layout.fragment_main);
++                }
++            });
++        } catch (NullPointerException e) {
++            System.out.println("noting input");
++        }
+     }
+ 
+     // click qr button event
+Index: app/src/main/java/com/example/qrnote/NoteFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.qrnote;\r\n\r\nimport android.os.Bundle;\r\nimport androidx.fragment.app.Fragment;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\n\r\n/**\r\n * A simple {@link Fragment} subclass.\r\n * Use the {@link NoteFragment#newInstance} factory method to\r\n * create an instance of this fragment.\r\n *\r\n */\r\npublic class NoteFragment extends Fragment {\r\n\r\n    // TODO: Rename parameter arguments, choose names that match\r\n    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER\r\n    private static final String ARG_PARAM1 = \"param1\";\r\n    private static final String ARG_PARAM2 = \"param2\";\r\n\r\n    // TODO: Rename and change types of parameters\r\n    private String mParam1;\r\n    private String mParam2;\r\n\r\n    /**\r\n     * Use this factory method to create a new instance of\r\n     * this fragment using the provided parameters.\r\n     *\r\n     * @param param1 Parameter 1.\r\n     * @param param2 Parameter 2.\r\n     * @return A new instance of fragment NoteFragment.\r\n     */\r\n    // TODO: Rename and change types and number of parameters\r\n    public static NoteFragment newInstance(String param1, String param2) {\r\n        NoteFragment fragment = new NoteFragment();\r\n        Bundle args = new Bundle();\r\n        args.putString(ARG_PARAM1, param1);\r\n        args.putString(ARG_PARAM2, param2);\r\n        fragment.setArguments(args);\r\n        return fragment;\r\n    }\r\n\r\n    public NoteFragment() {\r\n        // Required empty public constructor\r\n    }\r\n\r\n    @Override\r\n    public void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        if (getArguments() != null) {\r\n            mParam1 = getArguments().getString(ARG_PARAM1);\r\n            mParam2 = getArguments().getString(ARG_PARAM2);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container,\r\n                             Bundle savedInstanceState) {\r\n        // Inflate the layout for this fragment\r\n        return inflater.inflate(R.layout.fragment_note, container, false);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/qrnote/NoteFragment.java b/app/src/main/java/com/example/qrnote/NoteFragment.java
+--- a/app/src/main/java/com/example/qrnote/NoteFragment.java	(revision b191ebfc10af8669cd8fce54298f513f39a77005)
++++ b/app/src/main/java/com/example/qrnote/NoteFragment.java	(date 1636161054007)
+@@ -1,10 +1,32 @@
+ package com.example.qrnote;
+ 
++import android.content.SharedPreferences;
+ import android.os.Bundle;
+ import androidx.fragment.app.Fragment;
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
++import android.widget.ArrayAdapter;
++import android.widget.ListView;
++import android.widget.Toast;
++
++import com.android.volley.AuthFailureError;
++import com.android.volley.Request;
++import com.android.volley.Response;
++import com.android.volley.VolleyError;
++import com.android.volley.toolbox.JsonObjectRequest;
++import com.android.volley.toolbox.Volley;
++
++import org.json.JSONArray;
++import org.json.JSONException;
++import org.json.JSONObject;
++
++import java.util.ArrayList;
++import java.util.HashMap;
++import java.util.List;
++import java.util.Map;
++
++import static android.content.Context.MODE_PRIVATE;
+ 
+ /**
+  * A simple {@link Fragment} subclass.
+@@ -23,6 +45,13 @@
+     private String mParam1;
+     private String mParam2;
+ 
++    SharedPreferences tokenStore;
++    String token;
++
++    private ArrayList<String>    list;
++    private ListView             listview;
++    private ArrayAdapter<String> adapter;
++
+     /**
+      * Use this factory method to create a new instance of
+      * this fragment using the provided parameters.
+@@ -52,12 +81,68 @@
+             mParam1 = getArguments().getString(ARG_PARAM1);
+             mParam2 = getArguments().getString(ARG_PARAM2);
+         }
++
++        tokenStore = getActivity().getSharedPreferences("tokenStore", MODE_PRIVATE);
++        token = tokenStore.getString("token", null);
++
+     }
+ 
+     @Override
+     public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                              Bundle savedInstanceState) {
+         // Inflate the layout for this fragment
+-        return inflater.inflate(R.layout.fragment_note, container, false);
++        View view = inflater.inflate(R.layout.fragment_note, container, false);
++
++        list = new ArrayList<String>();
++        listview= (ListView) view.findViewById(R.id.list_view);
++        adapter =  new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list);
++        listview.setAdapter(adapter);
++
++        getTeams(token);
++        return view;
++    }
++
++    private void getTeams(String token) {
++        if(AppHelper.requestQueue == null){
++            AppHelper.requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
++        }
++        String url = "http://" + AppHelper.hostUrl + "/memo/teams";
++        JsonObjectRequest request = new JsonObjectRequest(
++                Request.Method.GET,
++                url,
++                new JSONObject(),
++                new Response.Listener<JSONObject>() {
++                    @Override
++                    public void onResponse(JSONObject response) {
++                        try {
++                            JSONArray data = response.getJSONArray("data");
++                            for (int i = 0; i < data.length(); i++) {
++                                JSONObject o = (JSONObject) data.get(i);
++                                list.add(o.getString("name"));
++                            }
++                            adapter.notifyDataSetChanged();
++                        } catch (JSONException e) {
++                            e.printStackTrace();
++                        }
++
++                    }
++                },
++                new Response.ErrorListener() {
++                    @Override
++                    public void onErrorResponse(VolleyError error) {
++                        error.printStackTrace();
++//                            문제발생 종료
++                    }
++                }
++        ) {
++            @Override
++            public Map<String, String> getHeaders() throws AuthFailureError {
++                Map<String, String> header = new HashMap<>();
++                header.put("token", token);
++                return header;
++            }
++        };
++        request.setShouldCache(false);
++        AppHelper.requestQueue.add(request);
+     }
+ }
+\ No newline at end of file
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apply plugin: 'com.android.application'\r\n\r\nandroid {\r\n    compileSdkVersion 31\r\n    buildToolsVersion \"30.0.2\"\r\n\r\n    defaultConfig {\r\n        applicationId \"com.example.qrnote\"\r\n        minSdkVersion 26\r\n        targetSdkVersion 31\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility JavaVersion.VERSION_1_8\r\n        targetCompatibility JavaVersion.VERSION_1_8\r\n    }\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation fileTree(dir: \"libs\", include: [\"*.jar\"])\r\n    implementation 'androidx.appcompat:appcompat:1.3.1'\r\n    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'\r\n    implementation 'com.google.android.material:material:1.0.0'\r\n    implementation 'androidx.legacy:legacy-support-v4:1.0.0'\r\n    testImplementation 'junit:junit:4.12'\r\n    androidTestImplementation 'androidx.test.ext:junit:1.1.1'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'\r\n    // min sdk version을 올려서 zxing-android-embedded가 실행 가능하도록 했다.\r\n    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'\r\n\r\n    implementation \"androidx.activity:activity:1.3.1\"\r\n    // Desugaring and multidex is required for API < 21.\r\n    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'\r\n    implementation 'androidx.multidex:multidex:2.0.1'\r\n\r\n    // leakcanary is for development purposes only\r\n    // https://github.com/square/leakcanary\r\n    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'\r\n\r\n    // AboutLibraries\r\n    implementation 'com.mikepenz:aboutlibraries:6.2.3'\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle b/app/build.gradle
+--- a/app/build.gradle	(revision b191ebfc10af8669cd8fce54298f513f39a77005)
++++ b/app/build.gradle	(date 1636161768255)
+@@ -14,8 +14,8 @@
+         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+     }
+     compileOptions {
+-        sourceCompatibility JavaVersion.VERSION_1_8
+-        targetCompatibility JavaVersion.VERSION_1_8
++        sourceCompatibility JavaVersion.VERSION_11
++        targetCompatibility JavaVersion.VERSION_11
+     }
+     buildTypes {
+         release {
+@@ -30,6 +30,7 @@
+     implementation 'androidx.appcompat:appcompat:1.3.1'
+     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+     implementation 'com.google.android.material:material:1.0.0'
++    implementation 'com.android.volley:volley:1.1.0'
+     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+     testImplementation 'junit:junit:4.12'
+     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+Index: app/src/main/res/layout/fragment_note.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".NoteFragment\">\r\n\r\n    <Button\r\n        android:id=\"@+id/note_create_button\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_gravity=\"left\"\r\n        android:text=\"@string/button_string_note_create\" />\r\n\r\n    <Button\r\n        android:id=\"@+id/note_list_button\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_gravity=\"right\"\r\n        android:text=\"@string/button_string_note_list\" />\r\n\r\n</FrameLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_note.xml b/app/src/main/res/layout/fragment_note.xml
+--- a/app/src/main/res/layout/fragment_note.xml	(revision b191ebfc10af8669cd8fce54298f513f39a77005)
++++ b/app/src/main/res/layout/fragment_note.xml	(date 1636160980463)
+@@ -5,18 +5,27 @@
+     android:layout_height="match_parent"
+     tools:context=".NoteFragment">
+ 
+-    <Button
+-        android:id="@+id/note_create_button"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_gravity="left"
+-        android:text="@string/button_string_note_create" />
++    <LinearLayout
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:orientation="vertical">
++        <Button
++            android:id="@+id/note_create_button"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_gravity="right"
++            android:onClick="Button_MakeNote"
++            android:text="@string/button_string_note_create"/>
+ 
+-    <Button
+-        android:id="@+id/note_list_button"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_gravity="right"
+-        android:text="@string/button_string_note_list" />
+-
++        <Button
++            android:id="@+id/note_list_button"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_gravity="right"
++            android:text="@string/button_string_note_list" />
++        <ListView
++            android:id="@+id/list_view"
++            android:layout_width="match_parent"
++            android:layout_height="match_parent"/>
++    </LinearLayout>
+ </FrameLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".MainActivity\">\r\n\r\n    <FrameLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:id=\"@+id/container\"></FrameLayout>\r\n\r\n    <com.google.android.material.bottomnavigation.BottomNavigationView\r\n        android:id=\"@+id/bottom_menu\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_alignParentBottom=\"true\"\r\n        android:background=\"#345E86\"\r\n        app:itemIconTint=\"#FFFFFF\"\r\n        app:itemTextColor=\"#f6d170\"\r\n        app:labelVisibilityMode=\"labeled\"\r\n        app:menu=\"@menu/bottom_menu\"/>\r\n\r\n</RelativeLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_main.xml b/app/src/main/res/layout/activity_main.xml
+--- a/app/src/main/res/layout/activity_main.xml	(revision b191ebfc10af8669cd8fce54298f513f39a77005)
++++ b/app/src/main/res/layout/activity_main.xml	(date 1636143675187)
+@@ -20,6 +20,6 @@
+         app:itemIconTint="#FFFFFF"
+         app:itemTextColor="#f6d170"
+         app:labelVisibilityMode="labeled"
+-        app:menu="@menu/bottom_menu"/>
++        app:menu="@menu/bottom_menu" />
+ 
+ </RelativeLayout>
+\ No newline at end of file
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"com.example.qrnote\">\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/AppTheme\"\r\n        android:hardwareAccelerated=\"true\">\r\n        <activity android:name=\".MainActivity\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision b191ebfc10af8669cd8fce54298f513f39a77005)
++++ b/app/src/main/AndroidManifest.xml	(date 1636160793050)
+@@ -1,5 +1,6 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
+     package="com.example.qrnote">
+ 
+     <application
+@@ -9,14 +10,25 @@
+         android:roundIcon="@mipmap/ic_launcher_round"
+         android:supportsRtl="true"
+         android:theme="@style/AppTheme"
+-        android:hardwareAccelerated="true">
++        android:hardwareAccelerated="true"
++        android:usesCleartextTraffic="true">
+         <activity android:name=".MainActivity">
++        </activity>
++        <activity android:name=".LoginActivity">
++        </activity>
++        <activity android:name=".LoadingActivity">
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+ 
+                 <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+         </activity>
+-    </application>
++        <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
++            android:screenOrientation="fullSensor"
++            tools:replace="screenOrientation"/>
++    </application>>
++    <uses-permission android:name="android.permission.INTERNET"/>
++    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
++    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+ 
+ </manifest>
+\ No newline at end of file
+Index: .idea/runConfigurations.xml
+===================================================================
+diff --git a/.idea/runConfigurations.xml b/.idea/runConfigurations.xml
+deleted file mode 100644
+--- a/.idea/runConfigurations.xml	(revision b191ebfc10af8669cd8fce54298f513f39a77005)
++++ /dev/null	(revision b191ebfc10af8669cd8fce54298f513f39a77005)
+@@ -1,12 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="RunConfigurationProducerService">
+-    <option name="ignoredProducers">
+-      <set>
+-        <option value="org.jetbrains.plugins.gradle.execution.test.runner.AllInPackageGradleConfigurationProducer" />
+-        <option value="org.jetbrains.plugins.gradle.execution.test.runner.TestClassGradleConfigurationProducer" />
+-        <option value="org.jetbrains.plugins.gradle.execution.test.runner.TestMethodGradleConfigurationProducer" />
+-      </set>
+-    </option>
+-  </component>
+-</project>
+\ No newline at end of file
+Index: gradle/wrapper/gradle-wrapper.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#Fri Nov 05 13:43:36 KST 2021\r\ndistributionBase=GRADLE_USER_HOME\r\ndistributionPath=wrapper/dists\r\nzipStoreBase=GRADLE_USER_HOME\r\nzipStorePath=wrapper/dists\r\ndistributionUrl=https\\://services.gradle.org/distributions/gradle-6.1.1-all.zip\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>x-windows-949
+===================================================================
+diff --git a/gradle/wrapper/gradle-wrapper.properties b/gradle/wrapper/gradle-wrapper.properties
+--- a/gradle/wrapper/gradle-wrapper.properties	(revision b191ebfc10af8669cd8fce54298f513f39a77005)
++++ b/gradle/wrapper/gradle-wrapper.properties	(date 1636161452295)
+@@ -3,4 +3,4 @@
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-6.1.1-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-7.0.2-all.zip
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_1_8\" project-jdk-name=\"1.8\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision b191ebfc10af8669cd8fce54298f513f39a77005)
++++ b/.idea/misc.xml	(date 1636162128948)
+@@ -1,6 +1,16 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
++  <component name="DesignSurface">
++    <option name="filePathToZoomLevelMap">
++      <map>
++        <entry key="..\:/List/Project/QRnote/qrnote/client/app/src/main/res/layout/activity_main.xml" value="0.21875" />
++        <entry key="..\:/List/Project/QRnote/qrnote/client/app/src/main/res/layout/fragment_main.xml" value="0.21875" />
++        <entry key="..\:/List/Project/QRnote/qrnote/client/app/src/main/res/layout/fragment_make_note.xml" value="0.21875" />
++        <entry key="..\:/List/Project/QRnote/qrnote/client/app/src/main/res/layout/fragment_note.xml" value="0.21875" />
++      </map>
++    </option>
++  </component>
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/build/classes" />
+   </component>
+   <component name="ProjectType">
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"VcsDirectoryMappings\">\r\n    <mapping directory=\"$PROJECT_DIR$/..\" vcs=\"Git\" />\r\n    <mapping directory=\"$PROJECT_DIR$\" vcs=\"Git\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+--- a/.idea/vcs.xml	(revision b191ebfc10af8669cd8fce54298f513f39a77005)
++++ b/.idea/vcs.xml	(date 1636163072056)
+@@ -2,6 +2,5 @@
+ <project version="4">
+   <component name="VcsDirectoryMappings">
+     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
+-    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Top-level build file where you can add configuration options common to all sub-projects/modules.\r\nbuildscript {\r\n    repositories {\r\n        google()\r\n        jcenter()\r\n    }\r\n    dependencies {\r\n        classpath \"com.android.tools.build:gradle:4.0.1\"\r\n\r\n        // NOTE: Do not place your application dependencies here; they belong\r\n        // in the individual module build.gradle files\r\n    }\r\n}\r\n\r\nallprojects {\r\n    repositories {\r\n        google()\r\n        jcenter()\r\n    }\r\n}\r\n\r\ntask clean(type: Delete) {\r\n    delete rootProject.buildDir\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build.gradle b/build.gradle
+--- a/build.gradle	(revision b191ebfc10af8669cd8fce54298f513f39a77005)
++++ b/build.gradle	(date 1636161452353)
+@@ -5,7 +5,7 @@
+         jcenter()
+     }
+     dependencies {
+-        classpath "com.android.tools.build:gradle:4.0.1"
++        classpath 'com.android.tools.build:gradle:7.0.3'
+ 
+         // NOTE: Do not place your application dependencies here; they belong
+         // in the individual module build.gradle files
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"GradleMigrationSettings\" migrationVersion=\"1\" />\r\n  <component name=\"GradleSettings\">\r\n    <option name=\"linkedExternalProjectsSettings\">\r\n      <GradleProjectSettings>\r\n        <option name=\"testRunner\" value=\"PLATFORM\" />\r\n        <option name=\"distributionType\" value=\"DEFAULT_WRAPPED\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"gradleJvm\" value=\"1.8\" />\r\n        <option name=\"modules\">\r\n          <set>\r\n            <option value=\"$PROJECT_DIR$\" />\r\n            <option value=\"$PROJECT_DIR$/app\" />\r\n          </set>\r\n        </option>\r\n        <option name=\"resolveModulePerSourceSet\" value=\"false\" />\r\n      </GradleProjectSettings>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+--- a/.idea/gradle.xml	(revision b191ebfc10af8669cd8fce54298f513f39a77005)
++++ b/.idea/gradle.xml	(date 1636162076143)
+@@ -4,10 +4,11 @@
+   <component name="GradleSettings">
+     <option name="linkedExternalProjectsSettings">
+       <GradleProjectSettings>
+-        <option name="testRunner" value="PLATFORM" />
++        <option name="testRunner" value="GRADLE" />
+         <option name="distributionType" value="DEFAULT_WRAPPED" />
+         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+-        <option name="gradleJvm" value="1.8" />
++        <option name="gradleHome" value="C:/NVPACK/gradle-4.4.1" />
++        <option name="gradleJvm" value="corretto-11" />
+         <option name="modules">
+           <set>
+             <option value="$PROJECT_DIR$" />
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <string name=\"app_name\">qrnote</string>\r\n    <string name=\"button_string_qr_scan\">QR 코드 스캔</string>\r\n    <string name=\"button_string_qr_find\">주변 QR노트 찾기</string>\r\n    <string name=\"button_string_qr_generate\">QR Generate</string>\r\n    <string name=\"button_string_note_create\">노트 생성</string>\r\n    <string name=\"button_string_note_list\">노트 목록</string>\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/strings.xml b/app/src/main/res/values/strings.xml
+--- a/app/src/main/res/values/strings.xml	(revision b191ebfc10af8669cd8fce54298f513f39a77005)
++++ b/app/src/main/res/values/strings.xml	(date 1636155194412)
+@@ -5,4 +5,6 @@
+     <string name="button_string_qr_generate">QR Generate</string>
+     <string name="button_string_note_create">노트 생성</string>
+     <string name="button_string_note_list">노트 목록</string>
++    <!-- TODO: Remove or change this placeholder text -->
++    <string name="hello_blank_fragment">Hello blank fragment</string>
+ </resources>
+\ No newline at end of file
