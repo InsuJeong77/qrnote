@@ -49,6 +49,8 @@ public class ReadNoteActivity extends AppCompatActivity {
     SharedPreferences tokenStore;
 
     private Button btn_Save;
+    private Button btn_Qr;
+
     private ImageView imageView_QrImage;
 
     private EditText editNote_TextArea;
@@ -57,6 +59,8 @@ public class ReadNoteActivity extends AppCompatActivity {
     private Long teamId = 0L;
 
     private long backPressTime = 0;
+
+    private boolean qrCode_is_visible=false;
 
     JSONObject currMemo = null;
 
@@ -77,6 +81,7 @@ public class ReadNoteActivity extends AppCompatActivity {
         tokenStore = getSharedPreferences("tokenStore", MODE_PRIVATE);
 
         btn_Save = findViewById(R.id.button_save);
+        btn_Qr = findViewById(R.id.button_qr_show);
         editNote_TextArea = findViewById(R.id.editNote);
         editNote_HeadArea = findViewById(R.id.editNote_Head);
         imageView_QrImage = findViewById(R.id.qr_imageView);
@@ -92,17 +97,32 @@ public class ReadNoteActivity extends AppCompatActivity {
         generateQRCode(qrcode);
 
         btn_Save.setOnClickListener(btnSaveListener);
+        btn_Qr.setOnClickListener(btnSaveListener);
     }
 
     View.OnClickListener btnSaveListener = new View.OnClickListener() {
         public void onClick(View v) {
-            try {
-                currMemo.put("title", editNote_HeadArea.getText().toString());
-                currMemo.put("contents", editNote_TextArea.getText().toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if (v.getId() == R.id.button_qr_show){
+                ImageView qr_image = findViewById(R.id.qr_imageView);
+                if (qrCode_is_visible != true) {
+                    qr_image.setVisibility(View.VISIBLE);
+                    qrCode_is_visible = true;
+                }
+                else {
+                    qr_image.setVisibility(View.INVISIBLE);
+                    qrCode_is_visible = false;
+                }
+                //Toast.makeText(getApplicationContext(), "에러", Toast.LENGTH_LONG).show();
             }
-            memoSave(currMemo);
+            else if(v.getId() == R.id.button_save) {
+                try {
+                    currMemo.put("title", editNote_HeadArea.getText().toString());
+                    currMemo.put("contents", editNote_TextArea.getText().toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                memoSave(currMemo);
+            }
         }
 
     };
