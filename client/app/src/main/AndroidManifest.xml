@@ -16,7 +16,9 @@
         </activity>
         <activity android:name=".LoginActivity">
         </activity>
-        <activity android:name=".MakeNote">
+        <activity android:name=".Note.MakeNote">
+        </activity>
+        <activity android:name=".Note.ReadNoteActivity">
         </activity>
         <activity android:name=".LoadingActivity" android:exported="true" tools:node="merge">
             <intent-filter>

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,9 +37,12 @@ public class MemoService {
     }
 
     public void modify(Memo memo, String loginId) {
+        QRMemo qrMemo = findById(memo.getId()).getQrMemo();
+        memo.setQrMemo(qrMemo);
+        memo.setGTime(LocalDateTime.now());
         memo.setId(null);
         memoRepository.save(memo);
-        QRMemo qrMemo = memo.getQrMemo();
+        qrMemo.setMTime(memo.getGTime());
         qrMemo.setCurrMemo(memo);
         qrMemoRepository.save(qrMemo);
     }

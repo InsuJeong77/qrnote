@@ -19,9 +19,9 @@ public interface QRMemoRepository extends JpaRepository<QRMemo, Long> {
     List<QRMemo> findQRMemosByTeamIds(@Param("ids") List<Long> ids);
 
     //authTeamId = 0은 개인메모
-    @Query("select q from QRMemo q where q.authTeamId = 0 and q.writer = :id")
+    @Query("select q from QRMemo q where q.authTeamId = 0 and q.writer = :id order by q.mTime desc")
     List<QRMemo> findPersonalMemo(@Param("id") String loginId);
 
-    @Query("select q from QRMemo q where q.authTeamId = :id")
+    @Query("select q from QRMemo q where q.authTeamId = :id order by q.mTime desc")
     List<QRMemo> findByTeamId(@Param("id") Long teamId);
 }

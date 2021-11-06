@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -26,6 +28,8 @@ public class QRMemo {
     private Double lng;
 
     private String qrcode = String.valueOf(UUID.randomUUID());
+
+    private LocalDateTime mTime = LocalDateTime.now();
 
     @JsonIgnore
     @OneToMany(mappedBy = "qrMemo", cascade = CascadeType.ALL)

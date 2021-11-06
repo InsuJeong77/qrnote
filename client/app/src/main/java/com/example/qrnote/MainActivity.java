@@ -12,6 +12,7 @@ import android.widget.Toast;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
+import com.example.qrnote.Note.NoteFragment;
 import com.google.zxing.client.android.Intents;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
