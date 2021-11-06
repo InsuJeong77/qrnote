@@ -32,10 +32,10 @@
         android:src="@drawable/button_rect_normal" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/qr_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
-        android:text="TextView" />
+        android:text="@string/qr_data_string" />
 
 </FrameLayout>

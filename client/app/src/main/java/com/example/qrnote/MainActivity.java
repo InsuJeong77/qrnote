@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -30,30 +31,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
     public String qr_read_data;
-
-    //barcodeLauncher
-    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
-            result -> {
-                if(result.getContents() == null) {
-                    Intent originalIntent = result.getOriginalIntent();
-                    if (originalIntent == null) {
-                        Log.d("MainActivity", "Cancelled scan");
-                        Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
-                    } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
-                        Log.d("MainActivity", "Cancelled scan due to missing camera permission");
-                        Toast.makeText(MainActivity.this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    Log.d("MainActivity", "Scanned");
-                    Toast.makeText(MainActivity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                    qr_read_data = result.getContents();
-                }
-            });
-
-
-    //fragment 선언
-    Fragment mainfragment;
-    Fragment notefragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,19 +63,34 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-//
-//        try {
-//            Button b = findViewById(R.id.note_create_button);
-//            b.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//                }
-//            });
-//        } catch (NullPointerException e) {
-//            System.out.println("noting input");
-//        }
     }
+
+
+    //barcodeLauncher
+    private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
+            result -> {
+                if(result.getContents() == null) {
+                    Intent originalIntent = result.getOriginalIntent();
+                    if (originalIntent == null) {
+                        Log.d("MainActivity", "Cancelled scan");
+                        Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_LONG).show();
+                    } else if(originalIntent.hasExtra(Intents.Scan.MISSING_CAMERA_PERMISSION)) {
+                        Log.d("MainActivity", "Cancelled scan due to missing camera permission");
+                        Toast.makeText(MainActivity.this, "Cancelled due to missing camera permission", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Log.d("MainActivity", "Scanned");
+                    Toast.makeText(MainActivity.this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                    qr_read_data = result.getContents();
+                    TextView qr_textview = (TextView) findViewById(R.id.qr_textView);
+                    qr_textview.setText(qr_read_data);
+                }
+            });
+
+
+    //fragment 선언
+    Fragment mainfragment;
+    Fragment notefragment;
 
     // click qr button event
     public void ClickQRScanButton(View v){
@@ -106,14 +98,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void ClickQRGenerateButton(View v){
-        System.out.println("asdfsdf");
         generateQRCode("dddd");
     }
 
     public void scanBarcode(View view) {
         ScanOptions options = new ScanOptions();
         options.setOrientationLocked(false);
-        options.setPrompt("QR코드를 스캔하세요");
+        options.setPrompt("QR 코드를 스캔하세요");
         barcodeLauncher.launch(options);
     }
 
