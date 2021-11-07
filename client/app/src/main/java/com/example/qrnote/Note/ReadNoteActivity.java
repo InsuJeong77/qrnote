@@ -120,7 +120,7 @@ public class ReadNoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 qr_image.setVisibility(View.INVISIBLE);
-                list.setVisibility(View.INVISIBLE);
+                memoListView.setVisibility(View.INVISIBLE);
                 qrCode_is_visible = false;
                 memo_list_visible = false;
             }

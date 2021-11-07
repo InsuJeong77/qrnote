@@ -141,10 +141,9 @@ public class MakeNote extends AppCompatActivity {
                         try {
                             JSONObject data = response.getJSONObject("data");
                             if (data.getBoolean("success")) {
-                                Toast.makeText(getApplicationContext(), data.getString("qrcode"), Toast.LENGTH_SHORT).show();
                                 finish();
                             } else {
-                                Toast.makeText(getApplicationContext(),"잘못된 정보 입력했음. 다시하셈", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),"잘못된 정보 입력했습니다. 다시 시도해 주십시오", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
