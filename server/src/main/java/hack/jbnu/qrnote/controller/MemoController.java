@@ -5,8 +5,10 @@ import hack.jbnu.qrnote.domain.Memo;
 import hack.jbnu.qrnote.domain.QRMemo;
 import hack.jbnu.qrnote.domain.Team;
 import hack.jbnu.qrnote.domain.User;
+import hack.jbnu.qrnote.dto.MemoDTO;
 import hack.jbnu.qrnote.dto.QRMemoDTO;
 import hack.jbnu.qrnote.dto.QRMemoVO;
+import hack.jbnu.qrnote.repository.QRMemoRepository;
 import hack.jbnu.qrnote.repository.TeamRepository;
 import hack.jbnu.qrnote.service.UserService;
 import hack.jbnu.qrnote.token.JwtToken;
@@ -20,9 +22,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 @RequiredArgsConstructor
@@ -97,6 +101,7 @@ public class MemoController {
             return ResponseEntity.ok(ApiMessage.builder().data(false).message("에러 메시지").build());
         }
         String loginId = (String) JwtToken.parseJwtToken(token).get("loginId");
+        memo.setWriter(loginId);
         memoService.modify(memo, loginId);
         return ResponseEntity.ok(ApiMessage.builder().data(true).message("성공 메시지").build());
     }
@@ -111,5 +116,14 @@ public class MemoController {
     public ResponseEntity readByQRMemoId(@RequestParam Long QRMemoId, @RequestHeader("token") String token) {
         String loginId = (String) JwtToken.parseJwtToken(token).get("loginId");
         return memoService.readByMemoId(QRMemoId, loginId);
+    }
+
+    @GetMapping("/vcs")
+    public ResponseEntity readVcs(@RequestParam Long qrmemoId) {
+        List<Memo> vcsBymemoId = memoService.findVCSBymemoId(qrmemoId);
+        List<MemoDTO> memoDTOStream = vcsBymemoId.stream().map(m -> new MemoDTO(m.getId(), m.getTitle(), m.getContents(),
+                m.getGTime().format(DateTimeFormatter.ofPattern("yy.MM.dd")), m.getWriter()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(ApiMessage.builder().data(memoDTOStream).message("성공").build());
     }
 }

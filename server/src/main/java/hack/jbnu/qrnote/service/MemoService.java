@@ -85,4 +85,8 @@ public class MemoService {
     public List<QRMemo> findByTeamId(Long teamId) {
         return qrMemoRepository.findByTeamId(teamId);
     }
+
+    public List<Memo> findVCSBymemoId(Long qrmemoId) {
+        return memoRepository.findVCSByQRMemoId(qrmemoId);
+    }
 }

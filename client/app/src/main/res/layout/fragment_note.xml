@@ -23,7 +23,7 @@
             android:dividerHeight="2dp"
             android:divider="#E2E2E2"
             android:layout_width="0dp"
-            android:layout_weight="6.5"
+            android:layout_weight="7.5"
             android:layout_height="match_parent"
             android:layout_marginLeft="16px"/>
 
@@ -36,6 +36,7 @@
         android:layout_gravity="right|bottom"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="100dp"
+        android:background="@drawable/add"
         />
 <!--    android:text="@string/button_string_note_create"-->
 

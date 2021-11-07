@@ -66,6 +66,7 @@ public class MakeNote extends AppCompatActivity {
         editNote_TextArea = findViewById(R.id.editNote);
         editNote_HeadArea = findViewById(R.id.editNote_Head);
 
+        editNote_TextArea.requestFocus();
         // fileName = editNote_HeadArea;
 
         btn_Save.setOnClickListener(btnSaveListener);

@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 import android.view.ViewGroup;
 
@@ -35,12 +36,14 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,24 +53,30 @@ public class ReadNoteActivity extends AppCompatActivity {
 
     private Button btn_Save;
     private Button btn_Qr;
+    private Button btn_Info;
 
     private ImageView imageView_QrImage;
 
     private EditText editNote_TextArea;
     private EditText editNote_HeadArea;
-
+    private ImageView qr_image;
+    private ListView list;
     private Long teamId = 0L;
+    private ArrayList<VcsMemo> memos;
+    private ListView    memoListView;
+    private CustomVcsAdapter memoAdapter;
 
     private long backPressTime = 0;
 
     private boolean qrCode_is_visible=false;
+    private boolean memo_list_visible=false;
 
     JSONObject currMemo = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_makenote);
+        setContentView(R.layout.activity_read_note);
 
         Intent intent = getIntent();
         Memo qrMemo = (Memo) intent.getSerializableExtra("qrMemo");
@@ -77,11 +86,19 @@ public class ReadNoteActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        memos = new ArrayList<VcsMemo>();
 
+        getMemoList(qrMemo.getId());
+
+        memoListView= (ListView) findViewById(R.id.memo_vcs);
         tokenStore = getSharedPreferences("tokenStore", MODE_PRIVATE);
+        memoAdapter = new CustomVcsAdapter(this, memos);
+        memoListView.setAdapter(memoAdapter);
 
+        qr_image = findViewById(R.id.qr_imageView);
         btn_Save = findViewById(R.id.button_save);
         btn_Qr = findViewById(R.id.button_qr_show);
+        btn_Info = findViewById(R.id.info_btn);
         editNote_TextArea = findViewById(R.id.editNote);
         editNote_HeadArea = findViewById(R.id.editNote_Head);
         imageView_QrImage = findViewById(R.id.qr_imageView);
@@ -98,12 +115,68 @@ public class ReadNoteActivity extends AppCompatActivity {
 
         btn_Save.setOnClickListener(btnSaveListener);
         btn_Qr.setOnClickListener(btnSaveListener);
+        btn_Info.setOnClickListener(btnSaveListener);
+        editNote_TextArea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                qr_image.setVisibility(View.INVISIBLE);
+                list.setVisibility(View.INVISIBLE);
+                qrCode_is_visible = false;
+                memo_list_visible = false;
+            }
+        });
+    }
+
+    private void getMemoList(Long qrmemoId) {
+        if(AppHelper.requestQueue == null){
+            AppHelper.requestQueue = Volley.newRequestQueue(getApplicationContext());
+        }
+        String url = "http://" + AppHelper.hostUrl + "/memo/vcs/?qrmemoId=" + qrmemoId;
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                new JSONObject(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray data = response.getJSONArray("data");
+                            for (int i = 0; i < data.length(); i++) {
+                                JSONObject o = (JSONObject) data.get(i);
+                                memos.add(new VcsMemo(o.getLong("id"), o.getString("title"), o.getString("contents"),
+                                        o.getString("gtime"), o.getString("writer")));
+                            }
+                            memoAdapter.notifyDataSetChanged();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+//                            문제발생 종료
+                    }
+                }
+        ) {
+        };
+        request.setShouldCache(false);
+        request.setRetryPolicy(
+                new DefaultRetryPolicy(
+                        0,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                ));
+        AppHelper.requestQueue.add(request);
     }
 
     View.OnClickListener btnSaveListener = new View.OnClickListener() {
         public void onClick(View v) {
             if (v.getId() == R.id.button_qr_show){
-                ImageView qr_image = findViewById(R.id.qr_imageView);
+
                 qr_image.setClipToOutline(true);
                 if (qrCode_is_visible != true) {
                     qr_image.setVisibility(View.VISIBLE);
@@ -123,6 +196,17 @@ public class ReadNoteActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 memoSave(currMemo);
+            } else if(v.getId() == R.id.info_btn) {
+
+                memoListView.setClipToOutline(true);
+                if (memo_list_visible != true) {
+                    memoListView.setVisibility(View.VISIBLE);
+                    memo_list_visible = true;
+                }
+                else {
+                    memoListView.setVisibility(View.INVISIBLE);
+                    memo_list_visible = false;
+                }
             }
         }
 

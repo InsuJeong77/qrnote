@@ -49,6 +49,7 @@ public class QRMemo {
     public static QRMemo create(QRMemoVO qrMemoVO, String writer) {
         QRMemo qrMemo = new QRMemo(qrMemoVO.getTeamId(), qrMemoVO.getLat(), qrMemoVO.getLng(), writer);
         Memo memo = qrMemoVO.getMemo();
+        memo.setWriter(writer);
         qrMemo.setCurrMemo(memo);
         qrMemo.memoList.add(memo);
         memo.setQrMemo(qrMemo);

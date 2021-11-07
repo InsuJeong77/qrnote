@@ -23,6 +23,7 @@ public class Memo {
     @NotEmpty
     private String contents;
     private LocalDateTime gTime = LocalDateTime.now();
+    private String writer;
 
     @JsonIgnore
     @ManyToOne

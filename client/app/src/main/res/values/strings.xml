@@ -9,5 +9,4 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="button_string_qr_show">QR Code</string>
     <string name="button_string_save">저장</string>
-    <string name="write_down">write down here</string>
 </resources>
