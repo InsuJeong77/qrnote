@@ -100,6 +100,8 @@
         android:layout_height="290dp"
         android:layout_gravity="center"
         android:visibility="invisible"
+        android:background="@drawable/round_outline"
+        android:clipToOutline="true"
         android:src="@drawable/button_rect_normal" />
 
 </FrameLayout>

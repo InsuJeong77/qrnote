@@ -104,6 +104,7 @@ public class ReadNoteActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (v.getId() == R.id.button_qr_show){
                 ImageView qr_image = findViewById(R.id.qr_imageView);
+                qr_image.setClipToOutline(true);
                 if (qrCode_is_visible != true) {
                     qr_image.setVisibility(View.VISIBLE);
                     qrCode_is_visible = true;
