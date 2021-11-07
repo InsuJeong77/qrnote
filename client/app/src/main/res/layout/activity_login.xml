@@ -11,25 +11,48 @@
             android:layout_marginHorizontal="50dp"
             android:orientation="vertical"
             android:gravity="center">
+                <ImageView
+                    android:layout_width="250dp"
+                    android:layout_height="150dp"
+                    android:src="@drawable/logo"/>
 
                 <EditText
                     android:id="@+id/id_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:layout_marginTop="30dp"
+                    android:drawableStart="@drawable/ic_baseline_person_outline_24"
+                    android:padding="5dp"
+                    android:hint="USER NAME"
+                    android:textColorHint="@color/colorWhite"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="22sp"
+                    />
 
                 <EditText
                     android:id="@+id/password_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
+                    android:layout_marginTop="30dp"
+                    android:drawableStart="@drawable/ic_baseline_lock_24"
+                    android:padding="5dp"
+                    android:hint="Password"
+                    android:textColorHint="@color/colorWhite"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="22sp"
                     />
 
                 <Button
                     android:id="@+id/login_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="login"
+                    android:layout_width="330dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="30dp"
+                    android:text="LOGIN"
+                    android:textSize="22sp"
+                    android:textColor="@color/colorWhite"
+                    android:background="@drawable/loginbutton_back"
                     />
         </LinearLayout>
 
